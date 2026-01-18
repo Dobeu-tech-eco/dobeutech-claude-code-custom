@@ -1,0 +1,45 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Development files
+.cursor/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation that's not needed in package
+IMPLEMENTATION_SUMMARY.md
+
+# Node modules (shouldn't be here, but just in case)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test files (if any)
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Build artifacts (if any)
+dist/
+build/
+*.map
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+*.sublime-project
+*.sublime-workspace
+
+# Keep all config directories (agents, skills, commands, rules, hooks, mcp-configs, templates, docs)
+# Keep bin and scripts directories
+# Keep README.md, CONTRIBUTING.md, CLAUDE.md

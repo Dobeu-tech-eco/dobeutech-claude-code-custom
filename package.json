@@ -1,0 +1,53 @@
+{
+  "name": "@jwdobeutechsolutions/dobeutech-claude-code-custom",
+  "version": "1.0.0",
+  "description": "Comprehensive centralized repository of Claude Code configurations including agents, skills, commands, hooks, and MCP servers optimized for full-stack development",
+  "author": "jwdobeutechsolutions",
+  "license": "MIT",
+  "main": "scripts/install.js",
+  "bin": {
+    "claude-config": "bin/claude-config.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js"
+  },
+  "files": [
+    "agents",
+    "skills",
+    "commands",
+    "rules",
+    "hooks",
+    "mcp-configs",
+    "templates",
+    "docs",
+    "bin",
+    "scripts",
+    "README.md",
+    "CONTRIBUTING.md",
+    "CLAUDE.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "agents",
+    "skills",
+    "commands",
+    "hooks",
+    "mcp",
+    "full-stack",
+    "development",
+    "claude",
+    "ai",
+    "configuration"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dobeutech/dobeutech-claude-code-custom.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

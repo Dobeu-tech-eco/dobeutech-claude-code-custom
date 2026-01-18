@@ -37,7 +37,9 @@ Instructions here...
 ```
 
 ### Skills (skills/)
-Workflow definitions and domain knowledge. Can be single `.md` files or directories with `SKILL.md` and references.
+Workflow definitions and domain knowledge. Two formats:
+- **Single file**: `coding-standards.md`, `backend-patterns.md`
+- **Directory**: `tdd-workflow/SKILL.md`, `security-review/SKILL.md` (with optional reference files)
 
 ### Commands (commands/)
 Slash commands that invoke workflows. Format:
@@ -53,7 +55,12 @@ Instructions...
 Always-follow guidelines that apply across all work. Kept modular by topic (security, testing, git-workflow, etc.).
 
 ### Hooks (hooks/hooks.json)
-Event-driven automations using `PreToolUse`, `PostToolUse`, and `Stop` hooks. Use bash commands with jq for processing.
+Event-driven automations triggered by tool usage:
+- **PreToolUse**: Runs before tool executes (can block)
+- **PostToolUse**: Runs after tool completes (analyze results)
+- **Stop**: Runs when session ends (final checks)
+
+Matchers use JMESPath-like syntax to filter when hooks run. Each hook executes bash commands with stdin containing tool context (accessible via `jq`).
 
 ## Contributing Guidelines
 
@@ -91,12 +98,28 @@ When adding new configs:
 ## Installation Pattern
 
 Users copy configs to their Claude directory:
+
 ```bash
+# Copy all configs
 cp agents/*.md ~/.claude/agents/
 cp rules/*.md ~/.claude/rules/
 cp commands/*.md ~/.claude/commands/
 cp -r skills/* ~/.claude/skills/
+
+# Or copy selectively
+cp agents/planner.md ~/.claude/agents/
+cp agents/tdd-guide.md ~/.claude/agents/
+cp rules/security.md ~/.claude/rules/
 ```
+
+For hooks, manually merge from `hooks/hooks.json` into `~/.claude/settings.json`:
+- Copy the `"hooks"` object into your settings
+- Adjust paths and commands as needed for your environment
+- Test matchers thoroughly before enabling
+
+For MCP servers, merge from `mcp-configs/mcp-servers.json` into `~/.claude.json`:
+- Replace all `YOUR_*_HERE` placeholders with real API keys
+- Enable only MCPs you need (see Context Window Management)
 
 ## Context Window Management
 
@@ -115,6 +138,32 @@ Before contributing:
 2. Test with Claude Code in real scenarios
 3. Verify hooks don't block normal operations
 4. Confirm agents complete their tasks successfully
+
+## Common Workflows
+
+### Adding a New Agent
+1. Create `agents/my-agent.md` with frontmatter (name, description, tools, model)
+2. Write clear instructions defining agent's role and process
+3. Test by copying to `~/.claude/agents/` and using Task tool with `subagent_type=my-agent`
+
+### Adding a New Command
+1. Create `commands/my-command.md` with frontmatter (description)
+2. Write instructions that will be invoked when user types `/my-command`
+3. Test by copying to `~/.claude/commands/` and running `/my-command`
+
+### Adding a Hook
+1. Add hook definition to `hooks/hooks.json`
+2. Define matcher to filter when hook runs
+3. Write bash command that processes stdin (tool context)
+4. Test thoroughly to ensure it doesn't block normal operations
+
+### Validating Configs
+Before committing:
+- Copy config to appropriate `~/.claude/` directory
+- Test in real Claude Code scenarios
+- Verify agents complete tasks successfully
+- Confirm hooks don't interfere with normal workflow
+- Check that matchers filter correctly
 
 ## Important Notes
 

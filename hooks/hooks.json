@@ -33,6 +33,16 @@
         "description": "Pause before git push to review changes"
       },
       {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"git commit\"",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "#!/bin/bash\n# Pre-commit security scan\ninput=$(cat)\n\nif git rev-parse --git-dir > /dev/null 2>&1; then\n  staged_files=$(git diff --cached --name-only 2>/dev/null || true)\n  \n  if [ -n \"$staged_files\" ]; then\n    echo \"[Hook] Running pre-commit security checks...\" >&2\n    \n    # Check for secrets\n    secrets_found=false\n    while IFS= read -r file; do\n      if [ -f \"$file\" ]; then\n        # Check for common secret patterns\n        if grep -qiE '(api[_-]?key|secret|password|token|private[_-]?key)\\s*[:=]\\s*[\"\\']?[a-zA-Z0-9]{20,}' \"$file\" 2>/dev/null; then\n          echo \"[Hook] WARNING: Potential secret found in $file\" >&2\n          secrets_found=true\n        fi\n      fi\n    done <<< \"$staged_files\"\n    \n    if [ \"$secrets_found\" = true ]; then\n      echo \"[Hook] BLOCKED: Potential secrets detected. Review before committing.\" >&2\n      exit 1\n    fi\n    \n    # Check dependency vulnerabilities\n    if [ -f \"package.json\" ] || [ -f \"package-lock.json\" ]; then\n      echo \"[Hook] Checking for dependency vulnerabilities...\" >&2\n      if command -v npm >/dev/null 2>&1; then\n        npm audit --audit-level=moderate 2>&1 | head -20 >&2 || true\n      fi\n    fi\n  fi\nfi\n\necho \"$input\""
+          }
+        ],
+        "description": "Pre-commit security scan and dependency vulnerability check"
+      },
+      {
         "matcher": "tool == \"Write\" && tool_input.file_path matches \"\\\\.(md|txt)$\" && !(tool_input.file_path matches \"README\\\\.md|CLAUDE\\\\.md|AGENTS\\\\.md|CONTRIBUTING\\\\.md\")",
         "hooks": [
           {
@@ -83,6 +93,16 @@
           }
         ],
         "description": "Warn about console.log statements after edits"
+      },
+      {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"git commit\"",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "#!/bin/bash\n# Post-commit automation and reminders\ninput=$(cat)\n\nif git rev-parse --git-dir > /dev/null 2>&1; then\n  commit_hash=$(git rev-parse HEAD 2>/dev/null || true)\n  commit_message=$(git log -1 --pretty=%B 2>/dev/null || true)\n  \n  if [ -n \"$commit_hash\" ]; then\n    echo \"[Hook] Commit $commit_hash created\" >&2\n    \n    # Auto-generate changelog reminder\n    if [ -f \"CHANGELOG.md\" ]; then\n      echo \"[Hook] Consider updating CHANGELOG.md\" >&2\n    fi\n    \n    # Check if documentation needs updating\n    if echo \"$commit_message\" | grep -qiE '(api|endpoint|route|function|class)'; then\n      echo \"[Hook] Consider updating API documentation\" >&2\n    fi\n  fi\nfi\n\necho \"$input\""
+          }
+        ],
+        "description": "Post-commit automation and documentation reminders"
       }
     ],
     "Stop": [
