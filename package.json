@@ -1,6 +1,6 @@
 {
   "name": "@jwdobeutechsolutions/dobeutech-claude-code-custom",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Comprehensive centralized repository of Claude Code configurations including agents, skills, commands, hooks, and MCP servers optimized for full-stack development",
   "author": "jwdobeutechsolutions",
   "license": "MIT",
