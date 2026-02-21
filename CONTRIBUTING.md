@@ -164,6 +164,10 @@ Then open a PR with:
 - Follow existing patterns
 - Document any dependencies
 
+### Paths and repository portability
+
+Do not commit files or file content that contain absolute user or machine-specific paths (e.g. `c:/Users/jswil/`, `C:\Users\...`, `/Users/username/`). Use relative paths or `~` for home so the repo stays portable when cloned on other machines or by other users.
+
 ### Don't
 
 - Include sensitive data (API keys, tokens, paths)
