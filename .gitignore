@@ -15,6 +15,7 @@ Thumbs.db
 # Editor files
 .idea/
 .vscode/
+# Note: .cursor/rules/ in this repo is intentional (shared session-init rule); do not ignore it
 *.swp
 *.swo
 

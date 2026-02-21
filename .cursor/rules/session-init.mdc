@@ -1,0 +1,41 @@
+---
+description: Session initialization - dynamically discover all available tools, MCP servers, and plugins at the start of every Cursor session
+alwaysApply: true
+---
+
+# Session Initialization Protocol
+
+Do not add hardcoded tool names, MCP server names, or Context7 library IDs; discover these at runtime.
+
+At the start of every new Cursor session, dynamically discover and catalogue available resources before beginning any task. Never rely on hardcoded lists -- always derive the catalogue from runtime configuration so it stays current as servers/plugins change.
+
+## 1. Discover MCP Servers
+
+- Read MCP tool descriptor folders under the mcps/ project directory to enumerate all configured servers
+- For each server, note its connection status (active, failed, disconnected)
+- Read each server's `tools/` subfolder to list the actual tools it exposes
+- Flag any servers that are FAILED so they can be triaged
+
+## 2. Discover Built-in Tools
+
+- Enumerate the tools available in the current Cursor agent context (they are injected by the system prompt -- do not maintain a static list here)
+- Note which subagent types are available via the Task tool
+
+## 3. Discover Plugins and Skills
+
+- Glob `~/.cursor/skills-cursor/*/SKILL.md` to find installed Cursor skills
+- Glob `~/.codex/skills/*/SKILL.md` to find installed Codex skills
+- Glob `agents/*.md` in the workspace for project-level agents
+- Glob `commands/*.md` in the workspace for project-level commands
+
+## 4. Verify Context7 Documentation Access
+
+- Call `resolve-library-id` for key topics (claude code, codex, gemini cli) to confirm the Context7 servers are responding
+- Do not hardcode library IDs; resolve them fresh each session since they can change
+
+## 5. Report Findings
+
+Summarize in a brief status block:
+- Total active MCP servers and any failures
+- Count of available tools, skills, agents, and commands
+- Any configuration issues requiring attention
