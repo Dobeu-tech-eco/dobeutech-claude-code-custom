@@ -11,9 +11,9 @@ At the start of every new Cursor session, dynamically discover and catalogue ava
 
 ## 1. Discover MCP Servers
 
-- Read MCP tool descriptor folders under the mcps/ project directory to enumerate all configured servers
+- Use Cursor MCP settings (Settings > MCP) to see configured servers and their connection status. If the project has an `mcps/` directory with tool descriptors, read that as well.
 - For each server, note its connection status (active, failed, disconnected)
-- Read each server's `tools/` subfolder to list the actual tools it exposes
+- List the tools each server exposes (from MCP settings or from each server's `tools/` subfolder under `mcps/` if present)
 - Flag any servers that are FAILED so they can be triaged
 
 ## 2. Discover Built-in Tools
