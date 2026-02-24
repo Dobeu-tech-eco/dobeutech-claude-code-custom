@@ -1,15 +1,21 @@
 {
   "name": "@jwdobeutechsolutions/dobeutech-claude-code-custom",
-  "version": "1.0.3",
-  "description": "Comprehensive centralized repository of Claude Code configurations including agents, skills, commands, hooks, and MCP servers optimized for full-stack development",
+  "version": "2.0.0",
+  "description": "Centralized AI CLI configurations for Claude Code, OpenAI Codex CLI, and Google Gemini CLI — agents, skills, commands, hooks, rules, and MCP servers from a single source of truth",
   "author": "jwdobeutechsolutions",
   "license": "MIT",
   "main": "scripts/install.js",
   "bin": {
-    "claude-config": "bin/claude-config.js"
+    "claude-config": "bin/claude-config.js",
+    "ai-config": "bin/ai-config.js"
   },
   "scripts": {
-    "postinstall": "node scripts/install.js"
+    "postinstall": "node scripts/install.js --target claude",
+    "install:all": "node scripts/install.js --target all",
+    "install:claude": "node scripts/install.js --target claude",
+    "install:codex": "node scripts/install.js --target codex",
+    "install:gemini": "node scripts/install.js --target gemini",
+    "verify": "node scripts/verify.js"
   },
   "files": [
     "agents",
@@ -28,6 +34,9 @@
   ],
   "keywords": [
     "claude-code",
+    "codex-cli",
+    "gemini-cli",
+    "ai-config",
     "agents",
     "skills",
     "commands",
@@ -36,6 +45,8 @@
     "full-stack",
     "development",
     "claude",
+    "codex",
+    "gemini",
     "ai",
     "configuration"
   ],

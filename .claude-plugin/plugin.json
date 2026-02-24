@@ -54,15 +54,8 @@
     "clickhouse-io",
     "api-design-patterns",
     "database-patterns",
-    "frontend-backend-integration",
-    "microservices-patterns",
-    "deployment-strategies",
-    "ci-cd-patterns",
-    "infrastructure-patterns",
-    "api-documentation",
-    "technical-writing",
-    "architecture-diagrams",
-    "memory-management"
+    "memory-management",
+    "project-guidelines-example"
   ],
   "commands": [
     "tdd",
@@ -83,7 +76,8 @@
     "changelog",
     "audit-security",
     "audit-performance",
-    "audit-accessibility"
+    "audit-accessibility",
+    "login"
   ],
   "mcpServers": [
     "github",

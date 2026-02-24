@@ -176,6 +176,17 @@ claude-config help       # Show help
 
 ---
 
+### Syncing to WSL
+
+If you use Claude Code on both Windows and WSL and want the same setup in both:
+
+1. In WSL run: `npm install -g @jwdobeutechsolutions/dobeutech-claude-code-custom`
+2. From this repo in WSL run: `./scripts/sync-claude-to-wsl.sh approach1` (copies your customizations from Windows)
+
+See [docs/sync-wsl.md](docs/sync-wsl.md) for full steps and an alternative full-copy approach.
+
+---
+
 ### Manual Installation (Alternative)
 
 If you prefer to install manually:
