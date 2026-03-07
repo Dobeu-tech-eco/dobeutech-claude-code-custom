@@ -208,6 +208,41 @@ function listComponents() {
   log(``, 'reset');
 }
 
+// Command: uninstall
+function uninstall() {
+  const targetDir = getTargetDir();
+
+  if (!fs.existsSync(targetDir)) {
+    log(`\n${colors.red}✗ Not installed${colors.reset}`, 'red');
+    return;
+  }
+
+  log(`\n${colors.bright}Uninstalling Claude Code Configurations...${colors.reset}`, 'bright');
+
+  const dirsToRemove = ['agents', 'skills', 'commands', 'rules', 'templates', 'docs'];
+  let removedCount = 0;
+
+  for (const dir of dirsToRemove) {
+    const dirPath = path.join(targetDir, dir);
+    if (fs.existsSync(dirPath)) {
+      try {
+        fs.rmSync(dirPath, { recursive: true, force: true });
+        log(`Removed ${dir}/`, 'green');
+        removedCount++;
+      } catch (err) {
+        log(`Failed to remove ${dir}/: ${err.message}`, 'red');
+      }
+    }
+  }
+
+  if (removedCount > 0) {
+    log(`\n${colors.green}✓ Uninstallation complete!${colors.reset}`, 'green');
+    log(`Note: 'settings.json' and '.claude.json' were left intact to preserve your custom settings and API keys.`, 'yellow');
+  } else {
+    log(`\n${colors.yellow}No standard configuration directories were found to remove.${colors.reset}`, 'yellow');
+  }
+}
+
 // Command: update
 function update() {
   const targetDir = getTargetDir();
@@ -267,6 +302,9 @@ function main() {
     case 'update':
       update();
       break;
+    case 'uninstall':
+      uninstall();
+      break;
     case 'help':
     case '--help':
     case '-h':
@@ -277,6 +315,7 @@ function main() {
       log(`  status    Show installation status and version`, 'cyan');
       log(`  list      List all installed components`, 'cyan');
       log(`  update    Update to latest version`, 'cyan');
+      log(`  uninstall Remove installed components`, 'cyan');
       log(`  help      Show this help message`, 'cyan');
       log(``, 'reset');
       break;

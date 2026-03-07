@@ -110,19 +110,51 @@ function ensureDir(dirPath) {
 
 // Copy directory recursively
 function copyDir(src, dest) {
-  ensureDir(dest);
-  const entries = fs.readdirSync(src, { withFileTypes: true });
+  try {
+    ensureDir(dest);
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry.name);
+      const destPath = path.join(dest, entry.name);
+
+      if (entry.isDirectory()) {
+        copyDir(srcPath, destPath);
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    }
+  } catch (error) {
+    throw new Error(`Failed to copy directory from ${src} to ${dest}: ${error.message}`);
+  }
+}
+
+// Create backup of existing configurations
+function createBackup(targetDir) {
+  if (!fs.existsSync(targetDir)) return null;
+
+  const backupBaseDir = path.join(targetDir, '.backup');
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupDir = path.join(backupBaseDir, timestamp);
   
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
+  const dirsToBackup = ['agents', 'skills', 'commands', 'rules', 'templates', 'docs'];
+  let createdBackup = false;
+
+  for (const dir of dirsToBackup) {
+    const srcPath = path.join(targetDir, dir);
+    const destPath = path.join(backupDir, dir);
     
-    if (entry.isDirectory()) {
+    if (fs.existsSync(srcPath)) {
+      if (!createdBackup) {
+        log(`Creating backup in ${backupDir}...`, 'blue');
+        ensureDir(backupDir);
+        createdBackup = true;
+      }
       copyDir(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
     }
   }
+
+  return createdBackup ? backupDir : null;
 }
 
 // Copy file
@@ -219,6 +251,9 @@ function install() {
     
     // Create target directory structure
     ensureDir(targetDir);
+
+    // Create backup before modifying
+    createBackup(targetDir);
     
     // Copy directories
     const dirsToCopy = ['agents', 'skills', 'commands', 'rules', 'templates', 'docs'];

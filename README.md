@@ -120,6 +120,7 @@ everything-claude-code/
 |   |-- mcp-template.json   # MCP config template
 
 |-- docs/             # Comprehensive documentation
+|   |-- API_KEYS.md         # API Keys configuration guide
 |   |-- INSTALLATION.md     # Installation guide
 |   |-- QUICK_START.md      # Quick start guide
 |   |-- AGENTS_GUIDE.md     # Agents usage guide
@@ -161,6 +162,12 @@ The installation script automatically:
 - Merges hooks into `settings.json` (preserves your existing hooks)
 - Merges MCP server configs into `.claude.json` (preserves your API keys)
 
+**If the installation script fails to run automatically**, you can execute it manually:
+
+```bash
+node node_modules/@jwdobeutechsolutions/dobeutech-claude-code-custom/scripts/install.js
+```
+
 **After installation:**
 1. Configure your API keys in `~/.claude/.claude.json` (or `./.claude/.claude.json` for local)
 2. Customize settings in `~/.claude/settings.json` if needed
@@ -168,9 +175,10 @@ The installation script automatically:
 
 **CLI Commands:**
 ```bash
-claude-config status    # Check installation status and version
+claude-config status     # Check installation status and version
 claude-config list       # List all installed components
 claude-config update     # Update to latest version
+claude-config uninstall  # Remove installed configuration directories
 claude-config help       # Show help
 ```
 
