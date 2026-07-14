@@ -1,0 +1,35 @@
+---
+description: Hooks system - PreToolUse, PostToolUse, and Stop hooks for Claude Code
+alwaysApply: true
+---
+
+# Hooks System
+
+## Hook Types
+
+- **PreToolUse**: Before tool execution (validation, parameter modification, can block via exit 1)
+- **PostToolUse**: After tool execution (auto-format, checks, analysis)
+- **Stop**: When session ends (final verification)
+
+## Active Hooks
+
+### PreToolUse
+- tmux reminder for long-running commands
+- git push review pause
+- doc file blocker (prevents unnecessary .md/.txt creation)
+- git commit security scan (blocks commits with secrets)
+
+### PostToolUse
+- Prettier auto-format for JS/TS files after edit
+- TypeScript type check after editing .ts/.tsx
+- console.log warning for edited files
+
+### Stop
+- console.log audit across all modified files
+
+## Auto-Accept Permissions
+
+- Enable for trusted, well-defined plans
+- Disable for exploratory work
+- Never use dangerously-skip-permissions flag
+- Configure `allowedTools` in `~/.claude.json` instead

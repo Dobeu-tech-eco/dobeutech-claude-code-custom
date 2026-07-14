@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(test:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(echo:*)",
+      "Bash(cd:*)",
+      "Bash(cp:*)"
     ]
   }
 }
