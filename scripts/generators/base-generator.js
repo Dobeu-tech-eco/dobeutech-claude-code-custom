@@ -2,12 +2,39 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ensureDir, log } = require('../utils/merge-utils');
+const { ensureDir, log, copyDir } = require('../utils/merge-utils');
 
 class BaseGenerator {
   constructor(sourceDir, options = {}) {
     this.sourceDir = sourceDir;
     this.dryRun = options.dryRun || false;
+  }
+
+  // Snapshot the dirs we are about to overwrite, so a bad install is recoverable.
+  createBackup(dirs) {
+    if (!fs.existsSync(this.targetDir)) return null;
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupDir = path.join(this.targetDir, '.backup', timestamp);
+    let backedUp = false;
+
+    for (const dir of dirs) {
+      const srcPath = path.join(this.targetDir, dir);
+      if (!fs.existsSync(srcPath)) continue;
+
+      if (!backedUp) {
+        if (this.dryRun) {
+          log(`[DRY RUN] Would back up to ${backupDir}`, 'yellow');
+          return null;
+        }
+        log(`Backing up existing config to ${backupDir}...`, 'blue');
+        ensureDir(backupDir);
+        backedUp = true;
+      }
+      copyDir(srcPath, path.join(backupDir, dir));
+    }
+
+    return backedUp ? backupDir : null;
   }
 
   get targetName() {

@@ -140,7 +140,7 @@ function install() {
 
     log(`\nNext steps:`, 'bright');
     if (targets.includes('claude')) {
-      log(`  Claude: Review API keys in ~/.claude/.claude.json`, 'yellow');
+      log(`  Claude: Review API keys in ~/.claude.json (home root, NOT ~/.claude/)`, 'yellow');
     }
     if (targets.includes('codex')) {
       log(`  Codex:  Check ~/.codex/AGENTS.md and config.toml`, 'yellow');

@@ -22,19 +22,38 @@ Use this when you run Claude Code on both Windows (PowerShell) and WSL on the sa
    ./scripts/sync-claude-to-wsl.sh approach1
    ```
 
-   Or manually (replace `jswil` with your Windows username if different):
+   The script **auto-detects your Windows username** — nothing is hardcoded. It asks Windows
+   directly via `cmd.exe /c echo %USERNAME%`, falls back to `$USER`/`whoami`, and finally to the
+   sole profile under `/mnt/c/Users` that contains a `.claude` directory. It prints the profile it
+   chose before doing anything.
+
+   Or manually, deriving the username the same way:
 
    ```bash
-   cp /mnt/c/Users/jswil/.claude/.claude.json ~/.claude/.claude.json
-   cp /mnt/c/Users/jswil/.claude/settings.json ~/.claude/settings.json
-   [ -f /mnt/c/Users/jswil/.claude/settings.local.json ] && cp /mnt/c/Users/jswil/.claude/settings.local.json ~/.claude/
+   WIN_USER=$(cd /mnt/c && cmd.exe /c 'echo %USERNAME%' 2>/dev/null | tr -d '\r\n')
+   WIN_CLAUDE=/mnt/c/Users/$WIN_USER/.claude
+
+   cp "$WIN_CLAUDE/.claude.json" ~/.claude/.claude.json
+   cp "$WIN_CLAUDE/settings.json" ~/.claude/settings.json
+   [ -f "$WIN_CLAUDE/settings.local.json" ] && cp "$WIN_CLAUDE/settings.local.json" ~/.claude/
    ```
 
-3. **Different Windows username:** set the path when running the script:
+3. **Auto-detection picked the wrong profile?** Override it. Two knobs, in precedence order:
 
    ```bash
+   # Give the full path (highest precedence)
    WINDOWS_CLAUDE_DIR=/mnt/c/Users/YourUser/.claude ./scripts/sync-claude-to-wsl.sh approach1
+
+   # ...or just the username, and let the script build the path
+   WINDOWS_USER=YourUser ./scripts/sync-claude-to-wsl.sh approach1
+
+   # ...or pass the path positionally
+   ./scripts/sync-claude-to-wsl.sh approach1 /mnt/c/Users/YourUser/.claude
    ```
+
+   Auto-detection matters because the WSL username and the Windows username are frequently
+   different (e.g. WSL `jeremy` vs Windows `JeremyWilliams`). A hardcoded username is what made
+   the previous version of this doc go stale.
 
 **Pros:** Clean WSL install; only overwrites the few files you customize.  
 **Cons:** If you add new agents/skills/commands by editing `~/.claude/` on Windows, copy them over or re-run Approach 2 once.
@@ -55,10 +74,13 @@ Use this to make WSL’s `~/.claude/` an exact copy of Windows’ directory (inc
    Or manually:
 
    ```bash
+   WIN_USER=$(cd /mnt/c && cmd.exe /c 'echo %USERNAME%' 2>/dev/null | tr -d '\r\n')
+   WIN_CLAUDE=/mnt/c/Users/$WIN_USER/.claude
+
    mkdir -p ~/.claude
-   rsync -av /mnt/c/Users/jswil/.claude/ ~/.claude/
+   rsync -av "$WIN_CLAUDE/" ~/.claude/
    # If you don't have rsync:
-   cp -r /mnt/c/Users/jswil/.claude/* ~/.claude/
+   cp -r "$WIN_CLAUDE"/* ~/.claude/
    ```
 
 2. **Line endings (recommended):** convert CRLF to LF so tools in WSL behave correctly:

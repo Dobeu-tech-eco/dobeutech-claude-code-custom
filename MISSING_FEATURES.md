@@ -1,5 +1,75 @@
 # Missing Features & Improvements
 
+## BLOCKING — Hooks are not actually installable (v2.0.0)
+
+The v2 hooks (`hooks/*.ps1` + `hooks/hooks.json`) are correct and work when wired up by hand, but
+**the installer cannot deliver them.** Two independent gaps, both verified by reading the code.
+Until both are fixed, hooks require the manual setup documented in [hooks/README.md](hooks/README.md).
+
+### H1. `hooks/` is never copied to the target directory
+**Status**: Broken
+**Priority**: BLOCKING
+**Where**: `scripts/generators/claude-generator.js:43`
+
+```js
+const dirsToCopy = ['agents', 'skills', 'commands', 'rules', 'templates', 'docs'];
+```
+
+`hooks` is not in the list. The generator reads `hooks/hooks.json` in place (from the package dir)
+and merges it into `settings.json`, but **`hooks/*.ps1` is never copied to `~/.claude/hooks/`**.
+The hook commands therefore point at scripts that do not exist at the destination.
+
+**Fix**: add `hooks` to `dirsToCopy`, or copy `hooks/*.ps1` explicitly (excluding `legacy/`).
+
+### H2. `mergeHooks()` performs no path substitution
+**Status**: Broken
+**Priority**: BLOCKING
+**Where**: `scripts/utils/merge-utils.js:60` (`mergeHooks`)
+
+`mergeHooks()` splices hook objects from `hooks.json` into `settings.json` **verbatim**,
+deduplicating only on the `matcher` string. It never inspects or rewrites the `command` field.
+
+`hooks/hooks.json` deliberately ships a portable placeholder rather than a hardcoded absolute path
+(committing `C:/Users/<someone>/...` violates the portability rule in `CONTRIBUTING.md`):
+
+```json
+"command": "pwsh -NoProfile -File ${CLAUDE_CONFIG_DIR}/hooks/pre-commit-secret-scan.ps1"
+```
+
+`${CLAUDE_CONFIG_DIR}` is **not** expanded by Claude Code and **not** expanded by `mergeHooks()`.
+It is a token the *installer* must substitute.
+
+**Fix**: before calling `mergeHooks()`, walk `hooksData.hooks[*][*].hooks[*].command` and replace
+`${CLAUDE_CONFIG_DIR}` with the resolved `targetDir` (`~/.claude` global, `./.claude` local).
+Without this, hooks land in `settings.json` pointing at a literal nonexistent path and silently
+never fire.
+
+### H3. `--dry-run` is honored by the generators but not parsed from argv
+**Status**: Partial
+**Priority**: High
+**Where**: `scripts/generators/base-generator.js:10` reads `options.dryRun`, and every generator
+respects it — but `scripts/install.js` does not parse a `--dry-run` flag into that option.
+The flag is documented in the README as the safe-preview path, so the argv plumbing needs to exist.
+
+### H4. Three commands shadow Claude Code built-ins and are still shipped
+**Status**: Unresolved
+**Priority**: High
+
+`commands/login.md`, `commands/plan.md`, and `commands/code-review.md` override the built-in
+`/login`, `/plan`, and `/code-review`. Overriding `/login` in particular can lock a user out of
+re-authenticating. The working local config at `~/.claude/commands/` resolves this by **omitting
+`login` and `plan` entirely** and shipping `code-review` as **`code-review-strict.md`** — but the
+repo still carries all three under their shadowing names, and `.claude-plugin/plugin.json` still
+declares them (it is required to mirror what is on disk).
+
+**Fix (decide one)**:
+- delete `commands/login.md` + `commands/plan.md`, rename `commands/code-review.md` →
+  `commands/code-review-strict.md`, and drop/rename them in `plugin.json`; **or**
+- keep the files but add an installer exclusion list so they are never copied to
+  `~/.claude/commands/`.
+
+Documented as a manual post-install cleanup in the README until resolved.
+
 ## Identified Missing Features
 
 ### 1. Uninstall Script/Command
@@ -176,11 +246,11 @@
 1. ✅ Create missing command files (migrate-db, test-integration, docs-arch)
 2. ✅ Create missing skill files (api-design-patterns, database-patterns, memory-management)
 3. ✅ Document browser installation scenario
-4. ⏳ Add backup functionality to install script
-5. ⏳ Improve error handling and messages
-6. ⏳ Document postinstall script manual execution
-7. ⏳ Add uninstall command
-8. ⏳ Create API key configuration guide
+4. ✅ Add backup functionality to install script
+5. ✅ Improve error handling and messages
+6. ✅ Document postinstall script manual execution
+7. ✅ Add uninstall command
+8. ✅ Create API key configuration guide
 
 ## Notes
 

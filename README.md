@@ -120,6 +120,7 @@ everything-claude-code/
 |   |-- mcp-template.json   # MCP config template
 
 |-- docs/             # Comprehensive documentation
+|   |-- API_KEYS.md         # API Keys configuration guide
 |   |-- INSTALLATION.md     # Installation guide
 |   |-- QUICK_START.md      # Quick start guide
 |   |-- AGENTS_GUIDE.md     # Agents usage guide
@@ -161,6 +162,12 @@ The installation script automatically:
 - Merges hooks into `settings.json` (preserves your existing hooks)
 - Merges MCP server configs into `.claude.json` (preserves your API keys)
 
+**If the installation script fails to run automatically**, you can execute it manually:
+
+```bash
+node node_modules/@jwdobeutechsolutions/dobeutech-claude-code-custom/scripts/install.js
+```
+
 **After installation:**
 1. Configure your API keys in `~/.claude/.claude.json` (or `./.claude/.claude.json` for local)
 2. Customize settings in `~/.claude/settings.json` if needed
@@ -168,10 +175,82 @@ The installation script automatically:
 
 **CLI Commands:**
 ```bash
-claude-config status    # Check installation status and version
+claude-config status     # Check installation status and version
 claude-config list       # List all installed components
 claude-config update     # Update to latest version
+claude-config uninstall  # Remove installed configuration directories
 claude-config help       # Show help
+```
+
+---
+
+### Windows 11 install path
+
+Windows 11 is the primary supported target for this repo.
+
+#### Prerequisites
+
+| Requirement | Why | Check |
+| --- | --- | --- |
+| **Node.js** ≥ 14 | Runs the installer and the `claude-config` CLI | `node --version` |
+| **PowerShell 7** (`pwsh`) | **Required by the hooks.** Not optional — see the warning below | `pwsh --version` |
+| **git** | Used by the secret-scanning hook to read staged files | `git --version` |
+
+PowerShell 7 is a separate install from the Windows-bundled PowerShell 5.1:
+
+```powershell
+winget install --id Microsoft.PowerShell --source winget
+```
+
+#### Install
+
+```powershell
+npm install -g @jwdobeutechsolutions/dobeutech-claude-code-custom
+```
+
+Preview what would change without writing anything — recommended on a machine that already has a
+`~/.claude/` you care about:
+
+```powershell
+node scripts/install.js --target claude --dry-run
+```
+
+`--dry-run` prints every copy and merge it *would* perform and exits without touching the
+filesystem. Run it before the real install if you have hand-tuned hooks, MCP servers, or API keys
+in `~/.claude/`.
+
+#### ⚠️ WARNING: the hooks are PowerShell-based and require `pwsh` on PATH
+
+Every hook in `hooks/hooks.json` shells out to `pwsh -NoProfile -File ...`. If PowerShell 7 is not
+installed, or `pwsh` is not on `PATH`, **every hook fails to launch.** Windows PowerShell 5.1
+(`powershell.exe`) is not a drop-in substitute and is not tested.
+
+The hooks also currently require **manual path setup** — the installer does not yet copy
+`hooks/*.ps1` into `~/.claude/hooks/`, nor rewrite the `${CLAUDE_CONFIG_DIR}` placeholder in the
+hook commands. See [hooks/README.md](hooks/README.md) for the manual steps and
+[MISSING_FEATURES.md](MISSING_FEATURES.md) for the tracked installer gaps.
+
+#### ⚠️ Three commands must NOT be installed — they shadow Claude Code built-ins
+
+Claude Code ships built-in `/login`, `/plan`, and `/security-review`. A same-named file in
+`~/.claude/commands/` **overrides the built-in**, which silently breaks core functionality
+(most severely `/login` — overriding it can lock you out of re-authenticating).
+
+| File in this repo | Shadows built-in | Correct handling |
+| --- | --- | --- |
+| `commands/login.md` | `/login` | **Do not install.** Delete from `~/.claude/commands/` if present. |
+| `commands/plan.md` | `/plan` | **Do not install.** Delete from `~/.claude/commands/` if present. |
+| `commands/code-review.md` | `/code-review` | **Install renamed** as `code-review-strict.md` → invoked as `/code-review-strict`. |
+
+The same collision applies to skills: this repo's security skill is named
+**`security-review-checklist`**, not `security-review`, precisely so it does not shadow the
+built-in `/security-review`.
+
+After installing, verify:
+
+```powershell
+Remove-Item "$HOME\.claude\commands\login.md","$HOME\.claude\commands\plan.md" -ErrorAction SilentlyContinue
+Move-Item "$HOME\.claude\commands\code-review.md" "$HOME\.claude\commands\code-review-strict.md" -Force
 ```
 
 ---
