@@ -1,0 +1,188 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1784928024172,
+  "projectRoot": "c:\\Users\\JeremyWilliams\\repos\\dobeutech-claude-code-custom",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=14.0.0",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "npm",
+    "runtime": "Node.js 14.0.0"
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {
+      "postinstall": "node scripts/install.js --target claude",
+      "install:all": "node scripts/install.js --target all",
+      "install:claude": "node scripts/install.js --target claude",
+      "install:codex": "node scripts/install.js --target codex",
+      "install:gemini": "node scripts/install.js --target gemini",
+      "verify": "node scripts/verify.js"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "bin",
+      "docs",
+      "examples",
+      "scripts"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "agents": {
+      "path": "agents",
+      "purpose": null,
+      "fileCount": 20,
+      "lastAccessed": 1784928024057,
+      "keyFiles": [
+        "accessibility-auditor.md",
+        "api-designer.md",
+        "architect.md",
+        "build-error-resolver.md",
+        "ci-cd-generator.md"
+      ]
+    },
+    "bin": {
+      "path": "bin",
+      "purpose": "Executable scripts",
+      "fileCount": 2,
+      "lastAccessed": 1784928024059,
+      "keyFiles": [
+        "ai-config.js",
+        "claude-config.js"
+      ]
+    },
+    "commands": {
+      "path": "commands",
+      "purpose": null,
+      "fileCount": 20,
+      "lastAccessed": 1784928024075,
+      "keyFiles": [
+        "api-design.md",
+        "audit-accessibility.md",
+        "audit-performance.md",
+        "audit-security.md",
+        "build-fix.md"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 2,
+      "lastAccessed": 1784928024076,
+      "keyFiles": [
+        "API_KEYS.md",
+        "sync-wsl.md"
+      ]
+    },
+    "examples": {
+      "path": "examples",
+      "purpose": "Example code",
+      "fileCount": 3,
+      "lastAccessed": 1784928024077,
+      "keyFiles": [
+        "CLAUDE.md",
+        "statusline.json",
+        "user-CLAUDE.md"
+      ]
+    },
+    "hooks": {
+      "path": "hooks",
+      "purpose": null,
+      "fileCount": 5,
+      "lastAccessed": 1784928024078,
+      "keyFiles": [
+        "hooks.json",
+        "post-edit-console-log.ps1",
+        "post-edit-format.ps1",
+        "pre-commit-secret-scan.ps1",
+        "README.md"
+      ]
+    },
+    "mcp-configs": {
+      "path": "mcp-configs",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1784928024080,
+      "keyFiles": [
+        "mcp-servers.json"
+      ]
+    },
+    "plugins": {
+      "path": "plugins",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1784928024081,
+      "keyFiles": [
+        "README.md"
+      ]
+    },
+    "rules": {
+      "path": "rules",
+      "purpose": null,
+      "fileCount": 9,
+      "lastAccessed": 1784928024082,
+      "keyFiles": [
+        "agents.md",
+        "coding-style.md",
+        "git-workflow.md",
+        "hooks.md",
+        "patterns.md"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 3,
+      "lastAccessed": 1784928024083,
+      "keyFiles": [
+        "install.js",
+        "sync-claude-to-wsl.sh",
+        "verify.js"
+      ]
+    },
+    "skills": {
+      "path": "skills",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1784928024083,
+      "keyFiles": []
+    },
+    "scripts\\utils": {
+      "path": "scripts\\utils",
+      "purpose": "Utility functions",
+      "fileCount": 2,
+      "lastAccessed": 1784928024104,
+      "keyFiles": [
+        "cli-adapter.js",
+        "merge-utils.js"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

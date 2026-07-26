@@ -26,3 +26,7 @@ node_modules/
 personal/
 private/
 .claude/
+
+# Ruflo hub-only policy (memory lives at repos root; never per-repo)
+.swarm/
+.claude-flow/
