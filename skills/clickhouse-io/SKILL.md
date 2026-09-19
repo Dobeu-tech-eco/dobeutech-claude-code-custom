@@ -1,6 +1,6 @@
 ---
 name: clickhouse-io
-description: ClickHouse database patterns, query optimization, analytics, and data engineering best practices for high-performance analytical workloads.
+description: Use when working with ClickHouse — designing MergeTree tables, partitioning and ordering keys, materialized views, writing or optimizing analytical OLAP queries, or bulk ingest and data-engineering pipelines.
 ---
 
 # ClickHouse Analytics Patterns

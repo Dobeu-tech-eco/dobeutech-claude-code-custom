@@ -1,6 +1,6 @@
 ---
 name: memory-management
-description: Patterns for managing persistent memory in Claude Code using mem0 and other memory systems for context retention across sessions
+description: Use when setting up or working with persistent memory and cross-session context retention in Claude Code, including mem0 integration, storing and retrieving memories, and memory hygiene.
 ---
 
 # Memory Management Patterns

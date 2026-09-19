@@ -1,6 +1,6 @@
 ---
 name: api-design-patterns
-description: API design patterns for RESTful, GraphQL, and gRPC APIs including versioning, authentication, error handling, and documentation
+description: Use when designing or reviewing API contracts — REST resource modeling, GraphQL schemas, gRPC services, versioning schemes, auth flows, pagination, error response shapes, or API documentation.
 ---
 
 # API Design Patterns

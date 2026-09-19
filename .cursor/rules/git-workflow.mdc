@@ -1,0 +1,32 @@
+---
+description: Commit message format, PR workflow, and feature implementation workflow
+alwaysApply: true
+---
+
+# Git Workflow
+
+## Commit Message Format
+
+```
+<type>: <description>
+
+<optional body>
+```
+
+Types: feat, fix, refactor, docs, test, chore, perf, ci
+
+## Pull Request Workflow
+
+When creating PRs:
+1. Analyze full commit history (not just latest commit)
+2. Use `git diff [base-branch]...HEAD` to see all changes
+3. Draft comprehensive PR summary
+4. Include test plan with TODOs
+5. Push with `-u` flag if new branch
+
+## Feature Implementation Workflow
+
+1. **Plan First** - Use **planner** agent; identify dependencies and risks
+2. **TDD Approach** - Use **tdd-guide** agent; write tests first, implement, refactor
+3. **Code Review** - Use **code-reviewer** agent immediately after writing code
+4. **Commit & Push** - Detailed commit messages, conventional commits format

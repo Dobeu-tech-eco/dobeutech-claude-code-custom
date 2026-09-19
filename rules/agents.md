@@ -1,5 +1,7 @@
 # Agent Orchestration
 
+See also: **startup.md** for the session boot sequence and agent routing table.
+
 ## Available Agents
 
 Located in `~/.claude/agents/`:
@@ -15,6 +17,17 @@ Located in `~/.claude/agents/`:
 | e2e-runner | E2E testing | Critical user flows |
 | refactor-cleaner | Dead code cleanup | Code maintenance |
 | doc-updater | Documentation | Updating docs |
+| api-designer | API design | REST/GraphQL/gRPC endpoints |
+| database-migrator | Schema migrations | Database changes |
+| docker-specialist | Containerization | Docker/compose setup |
+| ci-cd-generator | CI/CD pipelines | GitHub Actions, deployment |
+| deployment-manager | Release management | Production deployments |
+| fullstack-architect | Full-stack design | End-to-end system design |
+| infrastructure-engineer | Cloud infrastructure | AWS/GCP/Azure setup |
+| integration-tester | Integration tests | API and service testing |
+| performance-tester | Performance analysis | Profiling, optimization |
+| unit-test-generator | Unit test creation | Test generation, coverage |
+| accessibility-auditor | A11y compliance | WCAG audits, fixes |
 
 ## Immediate Agent Usage
 
@@ -23,6 +36,8 @@ No user prompt needed:
 2. Code just written/modified - Use **code-reviewer** agent
 3. Bug fix or new feature - Use **tdd-guide** agent
 4. Architectural decision - Use **architect** agent
+5. Build failure - Use **build-error-resolver** agent
+6. Security-sensitive change - Use **security-reviewer** agent
 
 ## Parallel Task Execution
 

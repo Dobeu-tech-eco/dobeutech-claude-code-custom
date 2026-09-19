@@ -1,3 +1,8 @@
+---
+name: project-guidelines-example
+description: Use as a reference template when authoring a new project-specific skill or CLAUDE.md — shows how to document a project's architecture, stack, conventions, directory layout, and workflows for Claude.
+---
+
 # Project Guidelines Skill (Example)
 
 This is an example of a project-specific skill. Use this as a template for your own projects.

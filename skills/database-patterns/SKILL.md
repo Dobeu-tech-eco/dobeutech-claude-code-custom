@@ -1,6 +1,6 @@
 ---
 name: database-patterns
-description: Database design patterns, ORM usage, query optimization, migration strategies, and data modeling best practices
+description: Use when designing schemas, modeling data, choosing or using an ORM, writing indexes and optimizing slow queries, planning migrations, or handling transactions and relations.
 ---
 
 # Database Patterns
